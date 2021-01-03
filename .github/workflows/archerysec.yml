@@ -63,8 +63,8 @@ jobs:
           echo $PROJECT_OWNER
 
           # create project in archerysec
-          archerysec-cli -s ${ ARCHERYSEC_HOST } -u ${ ARCHERYSEC_USER } -p ${ ARCHERYSEC_PASS } -t
           archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} -t
+          archerysec-cli -s ${ARCHERYSEC_HOST} -u ${ARCHERY_USER} -p ${ARCHERY_PASS} -t
 
           # PROJECT_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u $ARCHERY_USER -p $ARCHERY_PASS --createproject \
           # --project_name=$PROJECT_NAME --project_disc=$PROJECT_DISC  --project_start=$DATE \
