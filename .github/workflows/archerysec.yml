@@ -49,7 +49,7 @@ jobs:
           sudo wget -O ${SCA_PATH} ${SCA_URL} --quiet
           sudo unzip -q -o ${SCA_PATH} -d /opt/
           export PATH=/opt/dependency-check/bin:$PATH
-          sudo bash /opt/dependency-check/bin/dependency-check.sh --project "Devsecops" --scan $WORKSPACE/target/*.war -f XML --out $WORKSPACE/reports/dependency-check.xml
+          sudo bash /opt/dependency-check/bin/dependency-check.sh --project ${PROJECT_NAME} --scan . -f XML --out reports/dependency-check.xml
 
           sudo apt-get install jq
           sudo pip install archerysec-cli
