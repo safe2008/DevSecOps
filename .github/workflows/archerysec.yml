@@ -46,16 +46,16 @@ jobs:
         uses: actions/checkout@v2
       - name: run dependency check scan
         run: |
-          # sudo wget -O ${SCA_PATH} ${SCA_URL} --quiet
-          # sudo unzip -q -o ${SCA_PATH} -d /opt/
-          # export PATH=/opt/dependency-check/bin:$PATH
-          # sudo bash /opt/dependency-check/bin/dependency-check.sh --project ${PROJECT_NAME} --scan . -f XML --out reports/dependency-check.xml
+          sudo wget -O ${SCA_PATH} ${SCA_URL} --quiet
+          sudo unzip -q -o ${SCA_PATH} -d /opt/
+          export PATH=/opt/dependency-check/bin:$PATH
+          sudo bash /opt/dependency-check/bin/dependency-check.sh --project ${PROJECT_NAME} --scan . -f XML --out reports/dependency-check.xml
 
           sudo apt-get install jq
           sudo pip install archerysec-cli
 
           DATE=`date +%Y-%m-%d`
-          export COMMIT_ID=`cat .git/HEAD`
+          COMMIT_ID=`git rev-parse HEAD`
           echo $DATE
           echo $COMMIT_ID
           echo $PROJECT_NAME
@@ -63,23 +63,18 @@ jobs:
           echo $PROJECT_OWNER
 
           # create project in archerysec
-          archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} -t
-          TOKEN_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} -t`
-          echo $TOKEN_ID
-
           PROJECT_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} --createproject \
           --project_name=$PROJECT_NAME --project_disc=$PROJECT_DISC  --project_start=$DATE \
           --project_end=$DATE --project_owner=$PROJECT_OWNER | tail -n1 | jq '.project_id' | sed -e 's/^"//' -e 's/"$//'`
           echo $PROJECT_ID
 
           # Upload Scan report in archerysec
+          SCAN_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} --upload --file_type=XML \
+          --file=reports/dependency-check.xml --TARGET='$COMMIT_ID --scanner=dependencycheck \
+          --project_id='$PROJECT_ID' | tail -n1 | jq '.scan_id' | sed -e 's/^"//' -e 's/"$//'`
+          sleep 20
 
-          # SCAN_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} --upload --file_type=XML \
-          # --file=reports/dependency-check.xml --TARGET='$COMMIT_ID --scanner=dependencycheck \
-          # --project_id='$PROJECT_ID' | tail -n1 | jq '.scan_id' | sed -e 's/^"//' -e 's/"$//'`
-          # sleep 20
-
-          # echo "Scan Report Uploaded Successfully, Scan Id:" $SCAN_ID
+          echo "Scan Report Uploaded Successfully, Scan Id:" $SCAN_ID
 
       # - name: run source code review
       #   run: |
