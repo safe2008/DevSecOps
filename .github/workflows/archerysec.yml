@@ -64,26 +64,22 @@ jobs:
 
           # create project in archerysec
           archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} -t
-          archerysec-cli -s ${ARCHERYSEC_HOST} -u ${ARCHERY_USER} -p ${ARCHERY_PASS} -t
+          TOKEN_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} -t`
+          echo $TOKEN_ID
 
-          # PROJECT_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u $ARCHERY_USER -p $ARCHERY_PASS --createproject \
-          # --project_name=$PROJECT_NAME --project_disc=$PROJECT_DISC  --project_start=$DATE \
-          # --project_end=$DATE --project_owner=$PROJECT_OWNER | tail -n1 | jq '.project_id' | sed -e 's/^"//' -e 's/"$//'`
-          # echo $PROJECT_ID
+          PROJECT_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} --createproject \
+          --project_name=$PROJECT_NAME --project_disc=$PROJECT_DISC  --project_start=$DATE \
+          --project_end=$DATE --project_owner=$PROJECT_OWNER | tail -n1 | jq '.project_id' | sed -e 's/^"//' -e 's/"$//'`
+          echo $PROJECT_ID
 
           # Upload Scan report in archerysec
 
-          # SCAN_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u $ARCHERY_USER -p $ARCHERY_PASS --upload --file_type=XML \
+          # SCAN_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} --upload --file_type=XML \
           # --file=reports/dependency-check.xml --TARGET='$COMMIT_ID --scanner=dependencycheck \
           # --project_id='$PROJECT_ID' | tail -n1 | jq '.scan_id' | sed -e 's/^"//' -e 's/"$//'`
           # sleep 20
 
           # echo "Scan Report Uploaded Successfully, Scan Id:" $SCAN_ID
-
-        env:
-          ARCHERYSEC_HOST: ${{ secrets.ARCHERYSEC_HOST }}
-          ARCHERYSEC_USER: ${{ secrets.ARCHERYSEC_USER }}
-          ARCHERYSEC_PASS: ${{ secrets.ARCHERYSEC_PASS }}
 
       # - name: run source code review
       #   run: |
@@ -95,10 +91,10 @@ jobs:
       #     sudo apt-get install jq
       #     sudo pip install archerysec-cli
       #     DATE=`date +%Y-%m-%d`
-      #     export PROJECT_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u ${ARCHERYSEC_USER} -p ${ARCHERYSEC_PASS} --createproject \
+      #     export PROJECT_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${ARCHERYSEC_USER} -p ${ARCHERYSEC_PASS} --createproject \
       #       --project_name=devsecops --project_disc="devsecops project" --project_start=${DATE} \
       #       --project_end=${DATE} --project_owner=dev | tail -n1 | jq '.project_id' | sed -e 's/^"//' -e 's/"$//'`
-      #     export SCAN_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u ${ARCHERYSEC_USER} -p ${ARCHERYSEC_PASS} \
+      #     export SCAN_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${ARCHERYSEC_USER} -p ${ARCHERYSEC_PASS} \
       #       --upload --file_type=JSON --file=gl-sast-report.json --TARGET=${GITHUB_SHA} \
       #       --scanner=gitlabsast --project_id=''$PROJECT_ID'' | tail -n1 | jq '.scan_id' | sed -e 's/^"//' -e 's/"$//'`
       #     echo "Scan Report Uploaded Successfully, Scan Id:" $SCAN_ID
@@ -115,7 +111,7 @@ jobs:
       #       docker run \
       #         --volume $(pwd)/wrk:/output:rw \
       #         --volume $(pwd)/wrk:/zap/wrk:rw \
-      #         registry.gitlab.com/gitlab-org/security-products/dast:latest /analyze -t $ARCHERYSEC_HOST \
+      #         registry.gitlab.com/gitlab-org/security-products/dast:latest /analyze -t ${{ secrets.ARCHERYSEC_HOST }} \
       #         --auth-url ${ARCHERYSEC_AUTH_HOST} \
       #         --auth-username ${ARCHERYSEC_USER} \
       #         --auth-password ${ARCHERYSEC_PASS} \
@@ -127,10 +123,10 @@ jobs:
       #       sudo apt-get install jq
       #       sudo pip install archerysec-cli
       #       DATE=`date +%Y-%m-%d`
-      #       export PROJECT_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u ${ARCHERYSEC_USER} -p ${ARCHERYSEC_PASS} --createproject \
+      #       export PROJECT_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${ARCHERYSEC_USER} -p ${ARCHERYSEC_PASS} --createproject \
       #         --project_name=devsecops --project_disc="devsecops project" --project_start=${DATE} \
       #         --project_end=${DATE} --project_owner=dev | tail -n1 | jq '.project_id' | sed -e 's/^"//' -e 's/"$//'`
-      #       export SCAN_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u ${ARCHERYSEC_USER} -p ${ARCHERYSEC_PASS} \
+      #       export SCAN_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${ARCHERYSEC_USER} -p ${ARCHERYSEC_PASS} \
       #         --upload --file_type=XML --file=wrk/report.xml --TARGET=${GITHUB_SHA} \
       #         --scanner=zap_scan --project_id=''$PROJECT_ID'' | tail -n1 | jq '.scan_id' | sed -e 's/^"//' -e 's/"$//'`
       #       echo "Scan Report Uploaded Successfully, Scan Id:" $SCAN_ID
@@ -146,10 +142,10 @@ jobs:
       #     sudo apt-get install jq
       #     sudo pip install archerysec-cli
       #     DATE=`date +%Y-%m-%d`
-      #     export PROJECT_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u ${ARCHERYSEC_USER} -p ${ARCHERYSEC_PASS} --createproject \
+      #     export PROJECT_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${ARCHERYSEC_USER} -p ${ARCHERYSEC_PASS} --createproject \
       #       --project_name=devsecops --project_disc="devsecops project" --project_start=${DATE} \
       #       --project_end=${DATE} --project_owner=dev | tail -n1 | jq '.project_id' | sed -e 's/^"//' -e 's/"$//'`
-      #     export SCAN_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u ${ARCHERYSEC_USER} -p ${ARCHERYSEC_PASS} \
+      #     export SCAN_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${ARCHERYSEC_USER} -p ${ARCHERYSEC_PASS} \
       #       --openvasscan --target_ip=${ARCHERYSEC_TARGET_HOST} --project_id=${PROJECT_ID}`
       #   env:
       #     ARCHERYSEC_HOST: ${{ secrets.ARCHERYSEC_HOST }}
