@@ -58,6 +58,9 @@ jobs:
           export COMMIT_ID=`cat .git/HEAD`
           echo $DATE
           echo $COMMIT_ID
+          echo $PROJECT_NAME
+          echo $PROJECT_DISC
+          echo $PROJECT_OWNER
 
           # create project in archerysec
           export PROJECT_ID=`archerysec-cli -s ${ARCHERYSEC_HOST} -u ${ARCHERY_USER} -p ${ARCHERY_PASS} --createproject \
