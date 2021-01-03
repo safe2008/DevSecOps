@@ -1,0 +1,77 @@
+name: DevSecOps
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  sonarcloud:
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        # Disabling shallow clone is recommended for improving relevancy of reporting
+        fetch-depth: 0
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        args: >
+          -Dsonar.scala.coverage.reportPaths=coverage.xml
+          -Dsonar.scala.file.suffixes=.scala
+          -Dsonar.sources=src/
+          -Dsonar.test.exclusions=tests/**
+          -Dsonar.tests=test/
+          -Dsonar.verbose=true
+
+  hadolint:
+    name: hadolint
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: hadolint
+        uses: brpaz/hadolint-action@v1.1.0
+
+  trivy:
+    name: trivy
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build an image from Dockerfile
+        run: |
+          docker build . --file Dockerfile --tag localbuild/testimage:1.0.1
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'localbuild/testimage:1.0.1'
+          format: 'table'
+          exit-code: '0'
+          ignore-unfixed: true
+          severity: 'CRITICAL,HIGH'
+
+  trivy2:
+    name: trivy2
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build an image from Dockerfile
+        run: |
+          docker build . --file Dockerfile --tag localbuild/testimage:1.0.1
+
+      - name: Vulnerability Scan
+        uses: homoluctus/gitrivy@v1.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          image: localbuild/testimage:1.0.1
+          severity: 'CRITICAL,HIGH'
