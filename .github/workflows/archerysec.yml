@@ -27,32 +27,35 @@ jobs:
     - uses: actions/checkout@v2
 
   SAST:
-    name: security Scanner
+    name: Scurity Scanner
     runs-on: ubuntu-18.04
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
       - name: run dependency check scan
         run: |
-            docker run \
-              --env SECURE_LOG_LEVEL=${SECURE_LOG_LEVEL} \
-              -v "$PWD:/code" \
-              -v /var/run/docker.sock:/var/run/docker.sock \
-              registry.gitlab.com/gitlab-org/security-products/dependency-scanning:latest /code
-            
-            # create project in archerysec
-            DATE=`date +%Y-%m-%d`
+         docker run \
+          --env SECURE_LOG_LEVEL=${SECURE_LOG_LEVEL} \
+          -v "$PWD:/code" \
+          -v /var/run/docker.sock:/var/run/docker.sock \
+          registry.gitlab.com/gitlab-org/security-products/dependency-scanning:latest /code
+          ls
 
-            export PROJECT_ID=`archerysec-cli -s ${ARCHERYSEC_HOST} -u ${ARCHERYSEC_USER} -p ${ARCHERYSEC_PASS} --createproject \
-            --project_name=${PROJECT_NAME} --project_disc=${PROJECT_DISC} --project_start=${DATE} \
-            --project_end=${DATE} --project_owner=dev | tail -n1 | jq '.project_id' | sed -e 's/^"//' -e 's/"$//'`
+          sudo apt-get install jq
+          sudo pip install archerysec-cli
 
-            # Upload Scan report in archerysec
-            export SCAN_ID=`archerysec-cli -s ${ARCHERYSEC_HOST} -u ${ARCHERYSEC_USER} -p ${ARCHERYSEC_PASS} \
-            --upload --file_type=JSON --file=${WORKSPACE}/gl-dependency-scanning-report.json --TARGET=${GIT_COMMIT} \
-            --scanner=gitlabsca --project_id=''$PROJECT_ID'' | tail -n1 | jq '.scan_id' | sed -e 's/^"//' -e 's/"$//'`
-            
-            echo "Scan Report Uploaded Successfully, Scan Id:" $SCAN_ID
+          DATE=`date +%Y-%m-%d`
+          export PROJECT_ID=`archerysec-cli -s ${ARCHERYSEC_HOST} -u ${ARCHERYSEC_USER} -p ${ARCHERYSEC_PASS} --createproject \
+         --project_name=devsecops --project_disc="devsecops project" --project_start=${DATE} \
+         --project_end=${DATE} --project_owner=dev | tail -n1 | jq '.project_id' | sed -e 's/^"//' -e 's/"$//'`
+
+          # Upload Scan report in archerysec
+
+          export SCAN_ID=`archerysec-cli -s ${ARCHERYSEC_HOST} -u ${ARCHERYSEC_USER} -p ${ARCHERYSEC_PASS} \
+          --upload --file_type=JSON --file=gl-dependency-scanning-report.json --TARGET=${GITHUB_SHA} \
+          --scanner=gitlabsca --project_id=''$PROJECT_ID'' | tail -n1 | jq '.scan_id' | sed -e 's/^"//' -e 's/"$//'`
+
+          echo "Scan Report Uploaded Successfully, Scan Id:" $SCAN_ID
 
         env:
           ARCHERYSEC_HOST: ${{ secrets.ARCHERYSEC_HOST }}
