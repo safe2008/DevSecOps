@@ -35,7 +35,7 @@ jobs:
           --env SECURE_LOG_LEVEL=${SECURE_LOG_LEVEL} \
           -v "$PWD:/code" \
           -v /var/run/docker.sock:/var/run/docker.sock \
-          registry.gitlab.com/gitlab-org/security-products/analyzers/spotbugs:2.13.6 /code
+          registry.gitlab.com/gitlab-org/security-products/dependency-scanning:latest /code
           ls
           
           sudo apt-get install jq
