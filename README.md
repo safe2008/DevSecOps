@@ -18,9 +18,9 @@ export PROJECT_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u $ARCHERY_USER -p $ARCHE
 --project_end=${DATE} --project_owner=${PROJECT_OWNER} | tail -n1 | jq '.project_id' | sed -e 's/^"//' -e 's/"$//'`
 echo $PROJECT_ID
 
-export PROJECT_ID=`archerysec-cli -s ${ARCHERYSEC_HOST} -u ${ARCHERYSEC_USER} -p ${ARCHERYSEC_PASS} --createproject \
---project_name=devsecops --project_disc="devsecops project" --project_start=${DATE} \
---project_end=${DATE} --project_owner=dev | tail -n1 | jq '.project_id' | sed -e 's/^"//' -e 's/"$//'`
+PROJECT_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u $ARCHERY_USER -p $ARCHERY_PASS --createproject \
+--project_name=$PROJECT_NAME --project_disc=$PROJECT_DISC  --project_start=$DATE \
+--project_end=$DATE --project_owner=$PROJECT_OWNER | tail -n1 | jq '.project_id' | sed -e 's/^"//' -e 's/"$//'`
 echo $PROJECT_ID
 
 
