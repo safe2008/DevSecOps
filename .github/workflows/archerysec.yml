@@ -63,7 +63,8 @@ jobs:
           echo $PROJECT_OWNER
 
           # create project in archerysec
-          TOKEN_ID=`archerysec-cli -s ${ARCHERYSEC_HOST} -u ${ARCHERY_USER} -p ${ARCHERY_PASS} -t`
+          archerysec-cli -s ${ARCHERYSEC_HOST} -u ${ARCHERY_USER} -p ${ARCHERY_PASS} -t
+          TOKEN_ID=archerysec-cli -s ${ARCHERYSEC_HOST} -u ${ARCHERY_USER} -p ${ARCHERY_PASS} -t
           echo $TOKEN_ID
 
           # PROJECT_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u $ARCHERY_USER -p $ARCHERY_PASS --createproject \
