@@ -26,7 +26,7 @@ echo $PROJECT_ID
 
 archerysec-cli -s https://archerysec.35.198.225.221.xip.io -u safe2008 -p pass99word -t
 archerysec-cli -s ${ARCHERYSEC_HOST} -u ${ARCHERY_USER} -p ${ARCHERY_PASS} -t
-TOKEN_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u $ARCHERY_USER -p $ARCHERY_PASS -t`
+TOKEN_ID=`archerysec-cli -s ${ARCHERYSEC_HOST} -u ${ARCHERY_USER} -p ${ARCHERY_PASS} -t`
 echo $TOKEN_ID
 
 archerysec-cli -s ${ARCHERYSEC_HOST} -u ${ARCHERY_USER} -p ${ARCHERY_PASS} --createproject \
