@@ -55,13 +55,6 @@ jobs:
           sudo pip install archerysec-cli
 
           DATE=`date +%Y-%m-%d`
-          COMMIT_ID=`git rev-parse HEAD`
-          echo $DATE
-          echo $COMMIT_ID
-          echo $GITHUB_SHA
-          echo $PROJECT_NAME
-          echo $PROJECT_DISC
-          echo $PROJECT_OWNER
 
           # create project in archerysec
           PROJECT_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} --createproject \
