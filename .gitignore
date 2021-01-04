@@ -22,3 +22,4 @@ infrastructure/provisioning/archerysec/envs
 .idea
 .DS_Store
 *talisman_reports/*
+odc-reports/*
