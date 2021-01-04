@@ -40,7 +40,6 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
-      - name: run dependency check scan
         run: |
           ls -la
           ./dependency-check.sh
