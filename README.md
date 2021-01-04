@@ -31,3 +31,14 @@ For the short version:
 
 git rev-parse --short HEAD
           
+```bash
+##Installing Globally
+##Pre-Commit Hook
+curl --silent https://raw.githubusercontent.com/thoughtworks/talisman/master/global_install_scripts/install.bash > /tmp/install_talisman.bash && /bin/bash /tmp/install_talisman.bash
+
+##Pre-Push Hook
+curl --silent https://raw.githubusercontent.com/thoughtworks/talisman/master/global_install_scripts/install.bash > /tmp/install_talisman.bash && /bin/bash /tmp/install_talisman.bash pre-push
+
+## Installing to a Single Project (by default installs as Pre-Push Hook)
+curl https://thoughtworks.github.io/talisman/install.sh > ~/install-talisman.sh
+```
