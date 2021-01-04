@@ -1,9 +1,9 @@
 #!/bin/sh
 
-sudo wget -O $SCA_PATH $SCA_URL --quiet
-sudo unzip -q -o $SCA_PATH -d /opt/
+sudo wget -O ${SCA_PATH} ${SCA_URL} --quiet
+sudo unzip -q -o ${SCA_PATH} -d /opt/
 export PATH=/opt/dependency-check/bin:$PATH
-sudo bash /opt/dependency-check/bin/dependency-check.sh --project $PROJECT_NAME --scan . -f XML --out reports/dependency-check-report.xml
+sudo bash /opt/dependency-check/bin/dependency-check.sh --project ${PROJECT_NAME} --scan . -f XML --out reports/dependency-check-report.xml
 
 cat odc-reports/dependency-check-report.xml
 sudo apt-get install jq

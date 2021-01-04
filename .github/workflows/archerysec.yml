@@ -10,6 +10,11 @@ env:
   PROJECT_DISC: "DevSecOps Full pipeline"
   PROJECT_OWNER: "Boriphuth"
 
+  SCA_URL: "https://github.com/jeremylong/DependencyCheck/releases/download/v6.0.4/dependency-check-6.0.4-release.zip"
+  SCA_PATH: "/opt/v6.0.2.zip"
+  SAST_URL: "https://github.com/find-sec-bugs/find-sec-bugs/releases/download/version-1.10.1/findsecbugs-cli-1.10.1.zip"
+  SAST_PATH: "/opt/findsecbugs-cli-1.10.1.zip"
+
   DCHIGH: 22
   DCMEDIUM: 100
   FSBHIGH: 1
