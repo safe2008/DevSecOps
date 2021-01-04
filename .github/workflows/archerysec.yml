@@ -55,6 +55,14 @@ jobs:
               ARCHERYSEC_USER: ${{ secrets.ARCHERYSEC_USER }}
               ARCHERYSEC_PASS: ${{ secrets.ARCHERYSEC_PASS }}
 
+      - name: run dependency docker
+        run: |
+          ./dependency-check-docker.sh
+        env:
+              ARCHERYSEC_HOST: ${{ secrets.ARCHERYSEC_HOST }}
+              ARCHERYSEC_USER: ${{ secrets.ARCHERYSEC_USER }}
+              ARCHERYSEC_PASS: ${{ secrets.ARCHERYSEC_PASS }}
+
 # echo "Scan Report Uploaded Successfully, Scan Id:" $SCAN_ID
 
       # - name: run source code review

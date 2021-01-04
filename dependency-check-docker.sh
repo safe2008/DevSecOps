@@ -33,21 +33,20 @@ docker run --rm \
     # --suppression "/src/security/dependency-check-suppression.xml"
 
 cat odc-reports/dependency-check-report.xml
-# sudo apt-get install jq
-# sudo pip install archerysec-cli
+sudo apt-get install jq
+sudo pip install archerysec-cli
 
 DATE=`date +%Y-%m-%d`
-echo $DATE
-# create project in archerysec
-# PROJECT_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} --createproject \
-# --project_name=$PROJECT_NAME --project_disc=$PROJECT_DISC  --project_start=$DATE \
-# --project_end=$DATE --project_owner=$PROJECT_OWNER | tail -n1 | jq '.project_id' | sed -e 's/^"//' -e 's/"$//'`
-# echo $PROJECT_ID
 
-# Upload Scan report in archerysec
-# SCAN_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} --upload --file_type=XML \
-# --file=odc-reports/dependency-check-report.xml --TARGET=$GITHUB_SHA --scanner=dependencycheck \
-# --project_id=$PROJECT_ID | tail -n1 | jq '.scan_id' | sed -e 's/^"//' -e 's/"$//'`
-# sleep 20
+PROJECT_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u $ARCHERYSEC_USER -p $ARCHERYSEC_PASS --createproject \
+--project_name=$PROJECT_NAME --project_disc=$PROJECT_DISC  --project_start=$DATE \
+--project_end=$DATE --project_owner=$PROJECT_OWNER | tail -n1 | jq '.project_id' | sed -e 's/^"//' -e 's/"$//'`
 
-# echo "Scan Report Uploaded Successfully, Scan Id:" $SCAN_ID
+echo $PROJECT_ID
+echo $GITHUB_SHA
+
+SCAN_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u $ARCHERYSEC_USER -p $ARCHERYSEC_PASS --upload --file_type=XML \
+--file=reports/dependency-check-report.xml --TARGET=$GITHUB_SHA --scanner=dependencycheck \
+--project_id=$PROJECT_ID | tail -n1 | jq '.scan_id' | sed -e 's/^"//' -e 's/"$//'`
+
+echo "Scan Report Uploaded Successfully, Scan Id: $SCAN_ID"
