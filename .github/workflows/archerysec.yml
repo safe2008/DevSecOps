@@ -11,7 +11,8 @@ env:
   PROJECT_OWNER: "Boriphuth"
 
   SCA_URL: "https://github.com/jeremylong/DependencyCheck/releases/download/v6.0.4/dependency-check-6.0.4-release.zip"
-  SCA_PATH: "/opt/v6.0.2.zip"
+  SCA_PATH: "/opt/v6.0.4.zip"
+  
   SAST_URL: "https://github.com/find-sec-bugs/find-sec-bugs/releases/download/version-1.10.1/findsecbugs-cli-1.10.1.zip"
   SAST_PATH: "/opt/findsecbugs-cli-1.10.1.zip"
 
@@ -48,8 +49,11 @@ jobs:
 
       - name: run dependency check scan
         run: |
-          sudo wget -O ${SCA_PATH} ${SCA_URL} --quiet
-          sudo unzip -q -o ${SCA_PATH} -d /opt/
+          echo $SCA_PATH
+          echo$SCA_URL 
+
+          sudo wget -O $SCA_PATH $SCA_URL --quiet
+          sudo unzip -q -o $SCA_PATH -d /opt/
           export PATH=/opt/dependency-check/bin:$PATH
           sudo bash /opt/dependency-check/bin/dependency-check.sh --project ${PROJECT_NAME} --scan . -f XML --out reports/dependency-check-report.xml
 
