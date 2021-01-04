@@ -15,18 +15,23 @@ if [ ! -d "$CACHE_DIRECTORY" ]; then
     mkdir -p "$CACHE_DIRECTORY"
 fi
 
+echo $DC_VERSION
+echo $DATA_DIRECTORY
+echo $DC_PROJECT
+echo $USER
+
 # Make sure we are using the latest version
 docker pull owasp/dependency-check:$DC_VERSION
 docker run --rm \
 -e user=$USER \
 -u $(id -u ${USER}):$(id -g ${USER}) \
 --volume $(pwd):/src:z \
---volume "$DATA_DIRECTORY":/usr/share/dependency-check/data:z \
+--volume $DATA_DIRECTORY:/usr/share/dependency-check/data:z \
 --volume $(pwd)/odc-reports:/report:z \
 owasp/dependency-check:$DC_VERSION \
 --scan /src \
 --format "ALL" \
---project "$DC_PROJECT" \
+--project $DC_PROJECT \
 --out /report
 
 cat odc-reports/dependency-check-report.xml
@@ -34,7 +39,7 @@ cat odc-reports/dependency-check-report.xml
 # sudo pip install archerysec-cli
 
 DATE=`date +%Y-%m-%d`
-
+echo $DATE
 # create project in archerysec
 # PROJECT_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} --createproject \
 # --project_name=$PROJECT_NAME --project_disc=$PROJECT_DISC  --project_start=$DATE \
