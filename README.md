@@ -42,4 +42,9 @@ curl --silent https://raw.githubusercontent.com/thoughtworks/talisman/master/glo
 
 ## Installing to a Single Project (by default installs as Pre-Push Hook)
 curl https://thoughtworks.github.io/talisman/install.sh > ~/install-talisman.sh
+
+truffleHog --regex --entropy=False https://github.com/dxa4481/truffleHog.git
+
+truffleHog --regex --entropy=False https://github.com/tdg-analytics-platform/tdaa-service.git
+
 ```

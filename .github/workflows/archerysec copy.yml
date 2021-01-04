@@ -10,10 +10,10 @@ env:
   PROJECT_DISC: "DevSecOps Full pipeline"
   PROJECT_OWNER: "Boriphuth"
 
-  # SCA_URL: "https://github.com/jeremylong/DependencyCheck/releases/download/v6.0.4/dependency-check-6.0.4-release.zip"
-  # SCA_PATH: "/opt/v6.0.2.zip"
-  # SAST_URL: "https://github.com/find-sec-bugs/find-sec-bugs/releases/download/version-1.10.1/findsecbugs-cli-1.10.1.zip"
-  # SAST_PATH: "/opt/findsecbugs-cli-1.10.1.zip"
+  SCA_URL: "https://github.com/jeremylong/DependencyCheck/releases/download/v6.0.4/dependency-check-6.0.4-release.zip"
+  SCA_PATH: "/opt/v6.0.2.zip"
+  SAST_URL: "https://github.com/find-sec-bugs/find-sec-bugs/releases/download/version-1.10.1/findsecbugs-cli-1.10.1.zip"
+  SAST_PATH: "/opt/findsecbugs-cli-1.10.1.zip"
   DCHIGH: 22
   DCMEDIUM: 100
   FSBHIGH: 1
@@ -46,42 +46,10 @@ jobs:
         uses: actions/checkout@v2
       - name: run dependency check scan
         run: |
-          # sudo wget -O ${SCA_PATH} ${SCA_URL} --quiet
-          # sudo unzip -q -o ${SCA_PATH} -d /opt/
-          # export PATH=/opt/dependency-check/bin:$PATH
-          # sudo bash /opt/dependency-check/bin/dependency-check.sh --project ${PROJECT_NAME} --scan . -f XML --out reports/dependency-check.xml
-
-          DC_VERSION="latest"
-          DC_DIRECTORY=$HOME/OWASP-Dependency-Check
-          DC_PROJECT="dependency-check scan: $(pwd)"
-          DATA_DIRECTORY="$DC_DIRECTORY/data"
-          CACHE_DIRECTORY="$DC_DIRECTORY/data/cache"
-
-          if [ ! -d "$DATA_DIRECTORY" ]; then
-              echo "Initially creating persistent directory: $DATA_DIRECTORY"
-              mkdir -p "$DATA_DIRECTORY"
-          fi
-          if [ ! -d "$CACHE_DIRECTORY" ]; then
-              echo "Initially creating persistent directory: $CACHE_DIRECTORY"
-              mkdir -p "$CACHE_DIRECTORY"
-          fi
-
-          # Make sure we are using the latest version
-          docker pull owasp/dependency-check:$DC_VERSION
-
-          docker run --rm \
-              -e user=$USER \
-              -u $(id -u ${USER}):$(id -g ${USER}) \
-              --volume $(pwd):/src:z \
-              --volume "$DATA_DIRECTORY":/usr/share/dependency-check/data:z \
-              --volume $(pwd)/odc-reports:/report:z \
-              owasp/dependency-check:$DC_VERSION \
-              --scan /src \
-              --format "ALL" \
-              --project "$DC_PROJECT" \
-              --out /report
-              # Use suppression like this: (where /src == $pwd)
-              #--suppression "/src/security/dependency-check-suppression.xml"
+          sudo wget -O ${SCA_PATH} ${SCA_URL} --quiet
+          sudo unzip -q -o ${SCA_PATH} -d /opt/
+          export PATH=/opt/dependency-check/bin:$PATH
+          sudo bash /opt/dependency-check/bin/dependency-check.sh --project ${PROJECT_NAME} --scan . -f XML --out reports/dependency-check-report.xml
 
           cat odc-reports/dependency-check-report.xml
           sudo apt-get install jq
