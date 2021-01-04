@@ -28,8 +28,8 @@ DATE=`date +%Y-%m-%d`
 PROJECT_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u $ARCHERYSEC_USER -p $ARCHERYSEC_PASS --createproject \
 --project_name=$PROJECT_NAME --project_disc=$PROJECT_DISC  --project_start=$DATE \
 --project_end=$DATE --project_owner=$PROJECT_OWNER | tail -n1 | jq '.project_id' | sed -e 's/^"//' -e 's/"$//'`
-echo $PROJECT_ID
 
+echo $PROJECT_ID
 echo $GITHUB_SHA
 
 # SCAN_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u $ARCHERYSEC_USER -p $ARCHERYSEC_PASS --upload --file_type=XML \
