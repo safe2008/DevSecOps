@@ -31,10 +31,9 @@ PROJECT_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u $ARCHERYSEC_USER -p $ARCHERYSE
 
 echo $PROJECT_ID
 
-# Upload Scan report in archerysec
-# SCAN_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} --upload --file_type=XML \
-# --file=odc-reports/dependency-check-report.xml --TARGET=$GITHUB_SHA --scanner=dependencycheck \
-# --project_id=$PROJECT_ID | tail -n1 | jq '.scan_id' | sed -e 's/^"//' -e 's/"$//'`
-# sleep 20
+SCAN_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u $ARCHERYSEC_USER -p $ARCHERYSEC_PASS --upload --file_type=XML \
+--file=odc-reports/dependency-check-report.xml --TARGET=$GITHUB_SHA --scanner=dependencycheck \
+--project_id=$PROJECT_ID | tail -n1 | jq '.scan_id' | sed -e 's/^"//' -e 's/"$//'`
+sleep 20
 
-# echo "Scan Report Uploaded Successfully, Scan Id:" $SCAN_ID
+echo "Scan Report Uploaded Successfully, Scan Id:" $SCAN_ID
