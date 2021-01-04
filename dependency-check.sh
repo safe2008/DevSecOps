@@ -14,14 +14,6 @@ if [ ! -d "$CACHE_DIRECTORY" ]; then
     mkdir -p "$CACHE_DIRECTORY"
 fi
 
-echo $DC_VERSION
-echo $DATA_DIRECTORY
-echo $DC_PROJECT
-echo $USER
-
-echo $SCA_PATH
-echo $SCA_URL 
-
 sudo wget -O $SCA_PATH $SCA_URL --quiet
 sudo unzip -q -o $SCA_PATH -d /opt/
 export PATH=/opt/dependency-check/bin:$PATH
@@ -31,13 +23,13 @@ cat reports/dependency-check-report.xml
 sudo apt-get install jq
 sudo pip install archerysec-cli
 
-# DATE=`date +%Y-%m-%d`
+DATE=`date +%Y-%m-%d`
 
-# # create project in archerysec
-# PROJECT_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} --createproject \
-# --project_name=$PROJECT_NAME --project_disc=$PROJECT_DISC  --project_start=$DATE \
-# --project_end=$DATE --project_owner=$PROJECT_OWNER | tail -n1 | jq '.project_id' | sed -e 's/^"//' -e 's/"$//'`
-# echo $PROJECT_ID
+PROJECT_ID=`archerysec-cli -s $ARCHERYSEC_HOST -u $ARCHERYSEC_USER -p $ARCHERYSEC_PASS --createproject \
+--project_name=$PROJECT_NAME --project_disc=$PROJECT_DISC  --project_start=$DATE \
+--project_end=$DATE --project_owner=$PROJECT_OWNER | tail -n1 | jq '.project_id' | sed -e 's/^"//' -e 's/"$//'`
+
+echo $PROJECT_ID
 
 # Upload Scan report in archerysec
 # SCAN_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} --upload --file_type=XML \
