@@ -27,10 +27,9 @@ docker run --rm \
     owasp/dependency-check:$DC_VERSION \
     --scan /src \
     --format "XML" \
-    --project "$DC_PROJECT" \
-    --out /report
+    --project "$DC_PROJECT"
 
-cat $(pwd)/odc-reports/dependency-check-report.xml
+cat dependency-check-report.xml
 sudo apt-get install jq
 sudo pip install archerysec-cli
 
