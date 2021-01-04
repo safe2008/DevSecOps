@@ -32,6 +32,7 @@ For the short version:
 git rev-parse --short HEAD
           
 ```bash
+## https://medium.com/faun/practical-devops-continous-integration-with-git-vault-talisman-1b5ab046fcd9
 ##Installing Globally
 ##Pre-Commit Hook
 curl --silent https://raw.githubusercontent.com/thoughtworks/talisman/master/global_install_scripts/install.bash > /tmp/install_talisman.bash && /bin/bash /tmp/install_talisman.bash
