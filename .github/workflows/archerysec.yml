@@ -58,6 +58,7 @@ jobs:
           COMMIT_ID=`git rev-parse HEAD`
           echo $DATE
           echo $COMMIT_ID
+          echo $GITHUB_SHA
           echo $PROJECT_NAME
           echo $PROJECT_DISC
           echo $PROJECT_OWNER
@@ -71,7 +72,7 @@ jobs:
 
           # Upload Scan report in archerysec
           # SCAN_ID=`archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} --upload --file_type=XML \
-          # --file=reports/dependency-check.xml --TARGET=$COMMIT_ID --scanner=dependencycheck \
+          # --file=reports/dependency-check.xml --TARGET=$GITHUB_SHA --scanner=dependencycheck \
           # --project_id=$PROJECT_ID | tail -n1 | jq '.scan_id' | sed -e 's/^"//' -e 's/"$//'`
           # sleep 20
 

@@ -5,7 +5,7 @@ ARCHERY_PASS=pass99word
 PROJECT_NAME="DevSecOps"
 PROJECT_DISC="DevSecOps Full pipeline"
 PROJECT_OWNER="Boriphuth"
-COMMIT_ID=`55555555555555`
+COMMIT_ID='55555555555555'
 DATE=`date +%Y-%m-%d`
 
 archerysec-cli -s ${{ secrets.ARCHERYSEC_HOST }} -u ${{ secrets.ARCHERYSEC_USER }} -p ${{ secrets.ARCHERYSEC_PASS }} -t
@@ -21,6 +21,15 @@ archerysec-cli -s ${ARCHERYSEC_HOST} -u ${ARCHERY_USER} -p ${ARCHERY_PASS} --cre
           --project_name=${PROJECT_NAME} --project_disc=${PROJECT_DISC}  --project_start=${DATE} \
           --project_end=${DATE} --project_owner=${PROJECT_OWNER}
 
+PROJECT_ID=`archerysec-cli -s ${ARCHERYSEC_HOST} -u ${ARCHERY_USER} -p ${ARCHERY_PASS} --createproject \
+--project_name=$PROJECT_NAME --project_disc=$PROJECT_DISC  --project_start=$DATE \
+--project_end=$DATE --project_owner=$PROJECT_OWNER | tail -n1 | jq '.project_id' | sed -e 's/^"//' -e 's/"$//'`
+echo $PROJECT_ID
+
+SCAN_ID=`archerysec-cli -s ${ARCHERYSEC_HOST} -u ${ARCHERY_USER} -p ${ARCHERY_PASS} --upload --file_type=XML \
+--file=reports/dependency-check.xml --TARGET=$COMMIT_ID --scanner=dependencycheck \
+--project_id=$PROJECT_ID | tail -n1 | jq '.scan_id' | sed -e 's/^"//' -e 's/"$//'`
+echo $SCAN_ID
 
 Git command to display HEAD commit id?
 Use the command:
