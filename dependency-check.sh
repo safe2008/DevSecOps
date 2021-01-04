@@ -1,11 +1,33 @@
 #!/bin/sh
 
-sudo wget -O ${SCA_PATH} ${SCA_URL} --quiet
-sudo unzip -q -o ${SCA_PATH} -d /opt/
+DC_DIRECTORY=$HOME/OWASP-Dependency-Check
+DC_PROJECT="dependency-check scan: $(pwd)"
+DATA_DIRECTORY="$DC_DIRECTORY/data"
+CACHE_DIRECTORY="$DC_DIRECTORY/data/cache"
+
+if [ ! -d "$DATA_DIRECTORY" ]; then
+    echo "Initially creating persistent directory: $DATA_DIRECTORY"
+    mkdir -p "$DATA_DIRECTORY"
+fi
+if [ ! -d "$CACHE_DIRECTORY" ]; then
+    echo "Initially creating persistent directory: $CACHE_DIRECTORY"
+    mkdir -p "$CACHE_DIRECTORY"
+fi
+
+echo $DC_VERSION
+echo $DATA_DIRECTORY
+echo $DC_PROJECT
+echo $USER
+
+echo $SCA_PATH
+echo $SCA_URL 
+
+sudo wget -O $SCA_PATH $SCA_URL --quiet
+sudo unzip -q -o $SCA_PATH -d /opt/
 export PATH=/opt/dependency-check/bin:$PATH
 sudo bash /opt/dependency-check/bin/dependency-check.sh --project ${PROJECT_NAME} --scan . -f XML --out reports/dependency-check-report.xml
 
-cat odc-reports/dependency-check-report.xml
+cat reports/dependency-check-report.xml
 sudo apt-get install jq
 sudo pip install archerysec-cli
 
