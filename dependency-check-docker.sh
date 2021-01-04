@@ -26,13 +26,11 @@ docker run --rm \
     --volume $(pwd)/odc-reports:/report:z \
     owasp/dependency-check:$DC_VERSION \
     --scan /src \
-    --format "ALL" \
+    --format "XML" \
     --project "$DC_PROJECT" \
     --out /report
-    # Use suppression like this: (where /src == $pwd)
-    # --suppression "/src/security/dependency-check-suppression.xml"
 
-cat odc-reports/dependency-check-report.xml
+cat $(pwd)/odc-reports/dependency-check-report.xml
 sudo apt-get install jq
 sudo pip install archerysec-cli
 
